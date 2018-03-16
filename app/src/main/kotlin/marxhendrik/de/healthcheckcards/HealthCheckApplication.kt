@@ -6,6 +6,7 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import marxhendrik.de.healthcheckcards.dagger.DaggerAppComponent
+import timber.log.Timber
 import javax.inject.Inject
 
 class HealthCheckApplication : Application(), HasActivityInjector {
@@ -19,6 +20,8 @@ class HealthCheckApplication : Application(), HasActivityInjector {
                 .build()
                 .inject(this)
         super.onCreate()
+
+        Timber.plant(Timber.DebugTree())
     }
 
 
