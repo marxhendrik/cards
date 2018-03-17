@@ -8,9 +8,7 @@ const val CENTERED_Z_TRANSLATION = 100f
 
 
 interface ThreeCardsContract {
-    interface Presenter {
-        fun start()
-    }
+    interface Presenter
 
     interface View {
         fun getClicks(): Observable<SingleCardContract.View>

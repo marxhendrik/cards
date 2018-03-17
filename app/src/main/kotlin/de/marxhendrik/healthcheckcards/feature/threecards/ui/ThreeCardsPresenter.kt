@@ -1,16 +1,21 @@
 package de.marxhendrik.healthcheckcards.feature.threecards.ui
 
+import android.arch.lifecycle.LifecycleOwner
+import de.marxhendrik.healthcheckcards.base.LifecycleAwarePresenter
 import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardContract.View
 import java.util.concurrent.TimeUnit
 
 //Unit Tests FIXME
-class ThreeCardsPresenter(val view: ThreeCardsContract.View) : ThreeCardsContract.Presenter {
-    override fun start() {
+class ThreeCardsPresenter(
+        val view: ThreeCardsContract.View,
+        lifecycleOwner: LifecycleOwner) : LifecycleAwarePresenter(lifecycleOwner), ThreeCardsContract.Presenter {
 
-        //manage subcscription (try AAC) FIXME
-        view.getClicks()
+
+    override fun onStart() {
+        super.onStart()
+        addDisposable(view.getClicks()
                 .throttleFirst(ANIMATION_DURATION_MS, TimeUnit.MILLISECONDS)
-                .subscribe(this::onCardClicked)
+                .subscribe(this::onCardClicked))
     }
 
     private fun onCardClicked(card: View) {

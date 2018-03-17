@@ -1,5 +1,6 @@
 package de.marxhendrik.healthcheckcards.feature.threecards.dagger
 
+import android.arch.lifecycle.LifecycleOwner
 import dagger.Module
 import dagger.Provides
 import dagger.android.ContributesAndroidInjector
@@ -23,6 +24,9 @@ class ThreeCardsActivityModule {
     fun provideScreenWidth(activity: ThreeCardsActivity): Float {
         return activity.resources.displayMetrics.widthPixels.toFloat()
     }
+
+    @Provides
+    fun provideLifeCycleOwner(activity: ThreeCardsActivity): LifecycleOwner = activity
 }
 
 @Module

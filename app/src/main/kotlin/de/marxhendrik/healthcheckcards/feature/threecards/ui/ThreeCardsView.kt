@@ -6,10 +6,10 @@ import android.widget.FrameLayout
 import com.jakewharton.rxbinding2.view.RxView
 import de.marxhendrik.healthcheckcards.dagger.InjectingView
 import de.marxhendrik.healthcheckcards.dagger.getSubComponentBuilder
-import de.marxhendrik.healthcheckcards.feature.threecards.extensions.animateTranslate
-import de.marxhendrik.healthcheckcards.feature.threecards.dagger.ThreeCardsComponent
 import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardContract
 import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardView
+import de.marxhendrik.healthcheckcards.feature.threecards.dagger.ThreeCardsComponent
+import de.marxhendrik.healthcheckcards.feature.threecards.extensions.animateTranslate
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.view_card_green.view.*
 import kotlinx.android.synthetic.main.view_card_orange.view.*
@@ -36,16 +36,6 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
                     .build()
                     .inject(this)
         }
-    }
-
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-
-        if (isInEditMode) {
-            return
-        }
-
-        presenter.start()
     }
 
     override fun getClicks(): Observable<SingleCardContract.View> = Observable.merge(
