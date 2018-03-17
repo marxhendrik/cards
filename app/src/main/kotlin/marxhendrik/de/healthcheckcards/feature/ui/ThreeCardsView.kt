@@ -1,9 +1,12 @@
 package marxhendrik.de.healthcheckcards.feature.ui
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
 import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
@@ -14,6 +17,8 @@ import marxhendrik.de.healthcheckcards.dagger.InjectingView
 import marxhendrik.de.healthcheckcards.dagger.getSubComponentBuilder
 import marxhendrik.de.healthcheckcards.feature.ui.ThreeCardsContract.Card
 import marxhendrik.de.healthcheckcards.feature.ui.ThreeCardsContract.Card.*
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 private const val ANIMATION_DURATION = 400L
@@ -27,12 +32,10 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
     @Inject
     lateinit var presenter: ThreeCardsContract.Presenter
 
+    private val animating = AtomicBoolean(false)
+
     private val cardToView: Map<Card, CardView> by lazy {
-        mapOf(
-                GREEN to vCardGreen,
-                ORANGE to vCardOrange,
-                RED to vCardRed
-        )
+        mapOf(vCardGreen.card to vCardGreen, vCardOrange.card to vCardOrange, vCardRed.card to vCardRed)
     }
 
     override val clicks: Observable<Card> by lazy {
@@ -41,6 +44,8 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
                 cardClicks(vCardOrange),
                 cardClicks(vCardRed)
         )
+                .throttleFirst(ANIMATION_DURATION, TimeUnit.MILLISECONDS)
+                .filter { !animating.get() }
     }
 
     init {
@@ -52,12 +57,14 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
         }
     }
 
+    private fun cardClicks(view: CardView) = RxView.clicks(view).map { view.card }
+
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
+
         if (isInEditMode) return
 
         initViews()
-
         presenter.start()
     }
 
@@ -67,47 +74,61 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
         vCardRed.card = RED
     }
 
-    override fun showFullScreen(it: Card) = animateFullScreen(cardToView.getValue(it))
+    override fun showFullScreen(card: Card) {
+        animateFullScreen(cardToView.getValue(card))
+    }
 
-    private fun cardClicks(view: CardView) = RxView.clicks(view).map { view.card }
-
-    //move logic out of here FIXME
+    //move logic out of here into presenter FIXME
     private fun animateFullScreen(cardView: CardView) {
+        val currentlyCentered: CardView? = cardToView.values.firstOrNull { it.centered }
 
-        var currentlyCentered: CardView? = null
-
-        cardToView.values
-                .map {
-                    if (it.centered) {
-                        currentlyCentered = it
-                    }
-                    it
-                }
-                .filter { it == currentlyCentered || it != cardView }
-                .forEach { unCenter(it) }
-
-        if (cardView != currentlyCentered) {
+        if (cardView == currentlyCentered) {
+            unCenter(cardView)
+        } else {
             center(cardView)
         }
     }
 
-    private fun unCenter(it: CardView) {
-        animateTranslate(direction = "X", cardView = it, translation = 0.0f)
-        animateTranslate(cardView = it, translation = 0.0f)
-        it.centered = false
+    private fun unCenter(cardView: CardView) {
+        animateTranslate(direction = "X", cardView = cardView, translation = 0.0f)
+        animateTranslate(cardView = cardView, translation = 0.0f, delay = ANIMATION_DURATION)
+
+        cardToView.values
+                .filter { it != cardView }
+                .forEach {
+                    //move all the ones on the right back in FIXME
+                }
+
+        cardView.centered = false
     }
 
     private fun center(cardView: CardView) {
         cardView.centered = true
+        cardToView.values
+                .filter { it != cardView }
+                .forEach {
+                    //move all the ones on the right out FIXME
+                }
         animateTranslate(cardView = cardView, translation = CENTERED_Z_TRANSLATION)
         animateTranslate(direction = "X", cardView = cardView, translation = cardView.getCenterTranslation(), delay = ANIMATION_DURATION)
     }
 
-    //FIXME try out physical animations
+    /*FIXME
+    1. move animations to a util or something
+    2. try out physical animations
+    3. make animation cooler (move the other cards from the right out and back in)
+     */
     private fun animateTranslate(direction: String = "Z", cardView: View, translation: Float, delay: Long = 0) {
         ObjectAnimator.ofFloat(cardView, "translation" + direction, cardView.translationZ, translation).apply {
             duration = ANIMATION_DURATION
             startDelay = delay
+            interpolator = AccelerateDecelerateInterpolator()
+            animating.set(true)
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    animating.set(false)
+                }
+            })
             start()
         }
     }

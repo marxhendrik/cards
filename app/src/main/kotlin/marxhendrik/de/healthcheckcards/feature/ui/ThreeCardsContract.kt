@@ -9,7 +9,7 @@ interface ThreeCardsContract {
 
     interface View {
         val clicks: Observable<Card>
-        fun showFullScreen(it: Card)
+        fun showFullScreen(card: Card)
     }
 
 
