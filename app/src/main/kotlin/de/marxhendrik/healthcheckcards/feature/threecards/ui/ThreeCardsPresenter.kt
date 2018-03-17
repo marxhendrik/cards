@@ -5,33 +5,34 @@ import de.marxhendrik.healthcheckcards.base.LifecycleAwarePresenter
 import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardContract
 import java.util.concurrent.TimeUnit
 
-//Unit Tests FIXME
 class ThreeCardsPresenter(
-        val view: ThreeCardsContract.View,
+        private val view: ThreeCardsContract.View,
         lifecycleOwner: LifecycleOwner) : LifecycleAwarePresenter(lifecycleOwner), ThreeCardsContract.Presenter {
 
 
     override fun onStart() {
         addDisposable(view.getClicks()
-                .throttleFirst(ANIMATION_DURATION_MS, TimeUnit.MILLISECONDS)
+                .throttleFirst(ANIMATION_DELAY_MS, TimeUnit.MILLISECONDS)
                 .subscribe(this::onCardClicked))
     }
 
     private fun onCardClicked(card: SingleCardContract.View) {
-        if (card.centered) {
+        val centered = card.centered
+
+        if (centered) {
             unCenter(card)
         } else {
             center(card)
         }
 
-        card.centered = !card.centered
+        card.centered = !centered
     }
 
 
     private fun unCenter(card: SingleCardContract.View) {
         card.animateToOriginalX {
             card.forEachViewOnRightSide {
-                it.animateToOriginalX(delay = ANIMATION_DURATION_MS)
+                it.animateToOriginalX(delay = ANIMATION_DELAY_MS)
             }
         }
         card.animateToBack()
@@ -58,13 +59,13 @@ class ThreeCardsPresenter(
             view.animateTranslateX(card = this, delay = delay, function = func)
 
     private fun SingleCardContract.View.animateCenter() =
-            view.animateTranslateX(card = this, translation = this.getCenterTranslation(), delay = ANIMATION_DURATION_MS)
+            view.animateTranslateX(card = this, translation = this.getCenterTranslation(), delay = ANIMATION_DELAY_MS)
 
     private fun SingleCardContract.View.animateToFront() =
-            view.animateTranslateZ(card = this, translation = CENTERED_Z_TRANSLATION, delay = ANIMATION_DURATION_MS)
+            view.animateTranslateZ(card = this, translation = CENTERED_Z_TRANSLATION, delay = ANIMATION_DELAY_MS)
 
     private fun SingleCardContract.View.animateToBack() =
-            view.animateTranslateZ(card = this, delay = ANIMATION_DURATION_MS)
+            view.animateTranslateZ(card = this, delay = ANIMATION_DELAY_MS)
 
     private fun SingleCardContract.View.animateOutRight(delay: Long = 0) =
             view.animateTranslateX(card = this, translation = this.getOutRightTranslation(), delay = delay)

@@ -3,7 +3,7 @@ package de.marxhendrik.healthcheckcards.feature.threecards.ui
 import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardContract
 import io.reactivex.Observable
 
-const val ANIMATION_DURATION_MS = 300L
+const val ANIMATION_DELAY_MS = 300L
 const val CENTERED_Z_TRANSLATION = 100f
 
 
