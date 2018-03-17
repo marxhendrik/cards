@@ -17,6 +17,7 @@ This app showcases some architectural examples:
 2. The Android *View* classes themselves are unaware of their modules, parent components, parent *View* etc.
 3. SubComponentBuilders are provided along common dependencies by the feature-Activity for all Views in the hierarchy
 4. Activities use AndroidInjection via a *BaseActivity* class
+5. A set of helper functions and classes reduces some boilerplate and makes injection easy from the perspective of the involved classes (see *InjectionTools.kt*)
 
 
 ## Remarks
