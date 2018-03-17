@@ -9,7 +9,8 @@ import de.marxhendrik.healthcheckcards.dagger.getSubComponentBuilder
 import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardContract
 import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardView
 import de.marxhendrik.healthcheckcards.feature.threecards.dagger.ThreeCardsComponent
-import de.marxhendrik.healthcheckcards.feature.threecards.extensions.animateTranslate
+import de.marxhendrik.healthcheckcards.feature.threecards.extensions.animateTranslateX
+import de.marxhendrik.healthcheckcards.feature.threecards.extensions.animateTranslateZ
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.view_card_green.view.*
 import kotlinx.android.synthetic.main.view_card_orange.view.*
@@ -46,13 +47,11 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
 
     private fun cardClicks(view: SingleCardView) = RxView.clicks(view).map { view }
 
-    override fun animateTranslateZ(card: SingleCardContract.View, translation: Float, animationDuration: Long, delay: Long) {
-        (card as SingleCardView).animateTranslate("Z", translation, animationDuration, delay)
-    }
+    override fun animateTranslateZ(card: SingleCardContract.View, translation: Float, delay: Long, function: () -> Unit) =
+            (card as SingleCardView).animateTranslateZ(translation, delay, function)
 
-    override fun animateTranslateX(card: SingleCardContract.View, translation: Float, animationDuration: Long, delay: Long, function: () -> Unit) {
-        (card as SingleCardView).animateTranslate("X", translation, delay, animationDuration, callbackFunc = function)
-    }
+    override fun animateTranslateX(card: SingleCardContract.View, translation: Float, delay: Long, function: () -> Unit) =
+            (card as SingleCardView).animateTranslateX(translation, delay, function)
 }
 
 

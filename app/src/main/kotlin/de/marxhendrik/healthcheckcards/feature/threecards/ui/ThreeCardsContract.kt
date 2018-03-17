@@ -12,8 +12,8 @@ interface ThreeCardsContract {
 
     interface View {
         fun getClicks(): Observable<SingleCardContract.View>
-        fun animateTranslateX(card: SingleCardContract.View, translation: Float = 0f, animationDuration: Long, delay: Long = 0, function: () -> Unit = {})
-        fun animateTranslateZ(card: SingleCardContract.View, translation: Float = 0f, animationDuration: Long, delay: Long = 0)
+        fun animateTranslateX(card: SingleCardContract.View, translation: Float = 0f, delay: Long = 0, function: () -> Unit = {})
+        fun animateTranslateZ(card: SingleCardContract.View, translation: Float = 0f, delay: Long = 0, function: () -> Unit = {})
         val cards: Set<SingleCardContract.View>
     }
 }

@@ -55,17 +55,17 @@ class ThreeCardsPresenter(
     }
 
     private fun SingleCardContract.View.animateToOriginalX(delay: Long = 0, func: () -> Unit = {}) =
-            view.animateTranslateX(card = this, animationDuration = ANIMATION_DURATION_MS, delay = delay, function = func)
+            view.animateTranslateX(card = this, delay = delay, function = func)
 
     private fun SingleCardContract.View.animateCenter() =
-            view.animateTranslateX(card = this, translation = this.getCenterTranslation(), animationDuration = ANIMATION_DURATION_MS, delay = ANIMATION_DURATION_MS)
+            view.animateTranslateX(card = this, translation = this.getCenterTranslation(), delay = ANIMATION_DURATION_MS)
 
     private fun SingleCardContract.View.animateToFront() =
-            view.animateTranslateZ(card = this, translation = CENTERED_Z_TRANSLATION, animationDuration = ANIMATION_DURATION_MS, delay = ANIMATION_DURATION_MS)
+            view.animateTranslateZ(card = this, translation = CENTERED_Z_TRANSLATION, delay = ANIMATION_DURATION_MS)
 
     private fun SingleCardContract.View.animateToBack() =
-            view.animateTranslateZ(card = this, animationDuration = ANIMATION_DURATION_MS, delay = ANIMATION_DURATION_MS)
+            view.animateTranslateZ(card = this, delay = ANIMATION_DURATION_MS)
 
     private fun SingleCardContract.View.animateOutRight(delay: Long = 0) =
-            view.animateTranslateX(card = this, animationDuration = ANIMATION_DURATION_MS, delay = delay, translation = this.getOutRightTranslation())
+            view.animateTranslateX(card = this, translation = this.getOutRightTranslation(), delay = delay)
 }
