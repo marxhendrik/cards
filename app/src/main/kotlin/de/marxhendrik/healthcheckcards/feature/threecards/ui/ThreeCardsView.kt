@@ -1,5 +1,7 @@
 package de.marxhendrik.healthcheckcards.feature.threecards.ui
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.util.AttributeSet
@@ -11,14 +13,13 @@ import de.marxhendrik.healthcheckcards.dagger.InjectingView
 import de.marxhendrik.healthcheckcards.dagger.getSubComponentBuilder
 import de.marxhendrik.healthcheckcards.feature.threecards.dagger.ThreeCardsComponent
 import de.marxhendrik.healthcheckcards.feature.threecards.ui.ThreeCardsContract.Card
-import de.marxhendrik.healthcheckcards.feature.threecards.ui.ThreeCardsContract.Card.*
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.view_card_green.view.*
 import kotlinx.android.synthetic.main.view_card_orange.view.*
 import kotlinx.android.synthetic.main.view_card_red.view.*
 import javax.inject.Inject
 
-const val ANIMATION_DURATION_MS = 400L
+const val ANIMATION_DURATION_MS = 300L
 private const val CENTERED_Z_TRANSLATION = 100f
 
 class ThreeCardsView @JvmOverloads constructor(context: Context, attr: AttributeSet? = null, style: Int = 0) :
@@ -33,14 +34,6 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
         mapOf(vCardGreen.card to vCardGreen, vCardOrange.card to vCardOrange, vCardRed.card to vCardRed)
     }
 
-    override val clicks: Observable<Card> by lazy {
-        Observable.merge(
-                cardClicks(vCardGreen),
-                cardClicks(vCardOrange),
-                cardClicks(vCardRed)
-        )
-    }
-
     init {
         if (!isInEditMode) {
             getSubComponentBuilder(ThreeCardsComponent.Builder::class)
@@ -50,53 +43,48 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
         }
     }
 
-    private fun cardClicks(view: SingleCardView) = RxView.clicks(view).map { view.card }
-
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
-        if (isInEditMode) return
+        if (isInEditMode) {
+            return
+        }
 
         initViews()
+
         presenter.start()
     }
 
     private fun initViews() {
-        vCardGreen.card = GREEN
-        vCardOrange.card = ORANGE
-        vCardRed.card = RED
+        vCardGreen.card = Card.Green()
+        vCardOrange.card = Card.Orange()
+        vCardRed.card = Card.Red()
     }
 
-    override fun showFullScreen(card: Card) {
-        animateFullScreen(cardToView.getValue(card))
-    }
+    override fun getClicks(): Observable<Card> = Observable.merge(
+            cardClicks(vCardGreen),
+            cardClicks(vCardOrange),
+            cardClicks(vCardRed)
+    )
 
-    //move logic out of here into presenter FIXME
-    private fun animateFullScreen(cardView: SingleCardView) {
-        val currentlyCentered: SingleCardView? = cardToView.values.firstOrNull { it.centered }
+    private fun cardClicks(view: SingleCardView) = RxView.clicks(view).map { view.card }
 
-        if (cardView == currentlyCentered) {
-            unCenter(cardView)
-        } else {
-            center(cardView)
-        }
-    }
+    override fun unCenter(card: Card) = unCenter(cardToView.getValue(card))
+
+    override fun center(card: Card) = center(cardToView.getValue(card))
 
     private fun unCenter(cardView: SingleCardView) {
-        animateTranslateX(cardView = cardView, translation = 0.0f)
-        animateTranslateZ(cardView = cardView, translation = 0.0f, delay = ANIMATION_DURATION_MS)
-
-        viewsToRightOfDo(cardView) {
-            animateTranslateX(it, 0f, delay = 2 * ANIMATION_DURATION_MS, animationDuration = ANIMATION_DURATION_MS)
+        animateTranslateX(cardView = cardView) {
+            viewsToRightOfDo(cardView) {
+                animateTranslateX(cardView = it, delay = ANIMATION_DURATION_MS)
+            }
         }
-
-        cardView.centered = false
+        animateTranslateZ(cardView = cardView, delay = ANIMATION_DURATION_MS)
     }
 
     private fun center(cardView: SingleCardView) {
-        cardView.centered = true
         viewsToRightOfDo(cardView) {
-            animateTranslateX(it, it.getOutRightTranslation(), animationDuration = ANIMATION_DURATION_MS)
+            animateTranslateX(cardView = it, translation = it.getOutRightTranslation())
         }
         animateTranslateZ(cardView = cardView, translation = CENTERED_Z_TRANSLATION, delay = ANIMATION_DURATION_MS)
         animateTranslateX(cardView = cardView, translation = cardView.getCenterTranslation(), delay = ANIMATION_DURATION_MS)
@@ -111,12 +99,12 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
                 }
     }
 
-    private fun animateTranslateX(cardView: View, translation: Float, delay: Long = 0, animationDuration: Long = ANIMATION_DURATION_MS) {
-        animateTranslate("X", cardView, translation, delay, animationDuration)
+    private fun animateTranslateX(cardView: View, translation: Float = 0f, delay: Long = 0, callbackFunc: () -> Unit = {}) {
+        animateTranslate("X", cardView, translation, delay, callbackFunc = callbackFunc)
     }
 
-    private fun animateTranslateZ(cardView: View, translation: Float, delay: Long = 0, animationDuration: Long = ANIMATION_DURATION_MS) {
-        animateTranslate("Z", cardView, translation, delay, animationDuration)
+    private fun animateTranslateZ(cardView: View, translation: Float = 0f, delay: Long = 0, callbackFunc: () -> Unit = {}) {
+        animateTranslate("Z", cardView, translation, delay, callbackFunc = callbackFunc)
     }
 
     /*FIXME
@@ -124,11 +112,22 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
     2. try out physical animations
     3. make animation cooler (move the other cards from the right out and back in)
      */
-    private fun animateTranslate(direction: String, cardView: View, translation: Float, delay: Long = 0, animationDuration: Long = ANIMATION_DURATION_MS) {
+    private fun animateTranslate(
+            direction: String,
+            cardView: View,
+            translation: Float = 0f,
+            delay: Long = 0,
+            animationDuration: Long = ANIMATION_DURATION_MS,
+            callbackFunc: () -> Unit = {}) {
         ObjectAnimator.ofFloat(cardView, "translation" + direction, translation).apply {
             duration = animationDuration
             startDelay = delay
             interpolator = AccelerateDecelerateInterpolator()
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    callbackFunc()
+                }
+            })
             start()
         }
     }

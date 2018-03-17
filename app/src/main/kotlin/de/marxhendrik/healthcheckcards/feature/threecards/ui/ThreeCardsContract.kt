@@ -8,12 +8,15 @@ interface ThreeCardsContract {
     }
 
     interface View {
-        val clicks: Observable<Card>
-        fun showFullScreen(card: Card)
+        fun getClicks(): Observable<Card>
+        fun center(card: Card)
+        fun unCenter(card: Card)
     }
 
 
-    enum class Card {
-        GREEN, ORANGE, RED
+    sealed class Card(var centered: Boolean = false) {
+        class Green : Card()
+        class Orange : Card()
+        class Red : Card()
     }
 }

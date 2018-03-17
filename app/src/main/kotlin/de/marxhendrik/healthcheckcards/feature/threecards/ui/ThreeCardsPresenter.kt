@@ -6,10 +6,18 @@ class ThreeCardsPresenter(val view: ThreeCardsContract.View) : ThreeCardsContrac
     override fun start() {
 
         //manage subcscription (try AAC) FIXME
-        view.clicks
+        view.getClicks()
                 .throttleFirst(ANIMATION_DURATION_MS, TimeUnit.MILLISECONDS)
-                .subscribe {
-                    view.showFullScreen(it)
-                }
+                .subscribe(this::onCardClicked)
+    }
+
+    private fun onCardClicked(it: ThreeCardsContract.Card) {
+        if (it.centered) {
+            view.unCenter(it)
+        } else {
+            view.center(it)
+        }
+
+        it.centered = !it.centered
     }
 }
