@@ -1,7 +1,9 @@
 package de.marxhendrik.healthcheckcards.feature.threecards.ui
 
+import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardContract.View
 import java.util.concurrent.TimeUnit
 
+//Unit Tests FIXME
 class ThreeCardsPresenter(val view: ThreeCardsContract.View) : ThreeCardsContract.Presenter {
     override fun start() {
 
@@ -11,7 +13,7 @@ class ThreeCardsPresenter(val view: ThreeCardsContract.View) : ThreeCardsContrac
                 .subscribe(this::onCardClicked)
     }
 
-    private fun onCardClicked(card: Card) {
+    private fun onCardClicked(card: View) {
         if (card.centered) {
             unCenter(card)
         } else {
@@ -22,7 +24,7 @@ class ThreeCardsPresenter(val view: ThreeCardsContract.View) : ThreeCardsContrac
     }
 
 
-    private fun unCenter(card: Card) {
+    private fun unCenter(card: View) {
         view.animateTranslateX(card = card) {
             viewsToTheRightOfCardDo(card = card) {
                 view.animateTranslateX(card = it, delay = ANIMATION_DURATION_MS)
@@ -32,16 +34,16 @@ class ThreeCardsPresenter(val view: ThreeCardsContract.View) : ThreeCardsContrac
         view.animateTranslateZ(card, delay = ANIMATION_DURATION_MS)
     }
 
-    private fun center(card: Card) {
+    private fun center(card: View) {
         viewsToTheRightOfCardDo(card = card) {
-            view.animateTranslateX(card = it, translation = it.translationToRightEdge)
+            view.animateTranslateX(card = it, translation = it.getOutRightTranslation())
         }
         view.animateTranslateZ(card = card, translation = CENTERED_Z_TRANSLATION, delay = ANIMATION_DURATION_MS)
-        view.animateTranslateX(card = card, translation = card.translationToCentre, delay = ANIMATION_DURATION_MS)
+        view.animateTranslateX(card = card, translation = card.getCenterTranslation(), delay = ANIMATION_DURATION_MS)
     }
 
-    private fun viewsToTheRightOfCardDo(card: Card, func: (Card) -> Unit) {
-        view.getCards()
+    private fun viewsToTheRightOfCardDo(card: View, func: (View) -> Unit) {
+        view.cards
                 .filter { card != it }
                 .filter { view.isToRightOf(card, it) }
                 .forEach {

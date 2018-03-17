@@ -1,5 +1,6 @@
 package de.marxhendrik.healthcheckcards.feature.threecards.ui
 
+import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardContract
 import io.reactivex.Observable
 
 const val ANIMATION_DURATION_MS = 300L
@@ -12,12 +13,10 @@ interface ThreeCardsContract {
     }
 
     interface View {
-        fun getClicks(): Observable<Card>
-        fun animateTranslateX(card: Card, translation: Float = 0f, delay: Long = 0, function: () -> Unit = {})
-        fun animateTranslateZ(card: Card, translation: Float = 0f, delay: Long = 0)
-        fun getCards(): Set<Card>
-        fun isToRightOf(card: Card, otherCard: Card): Boolean
+        fun getClicks(): Observable<SingleCardContract.View>
+        fun animateTranslateX(card: SingleCardContract.View, translation: Float = 0f, delay: Long = 0, function: () -> Unit = {})
+        fun animateTranslateZ(card: SingleCardContract.View, translation: Float = 0f, delay: Long = 0)
+        val cards: Set<SingleCardContract.View>
+        fun isToRightOf(card: SingleCardContract.View, otherCard: SingleCardContract.View): Boolean
     }
-
-
 }
