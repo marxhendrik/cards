@@ -13,6 +13,7 @@ import de.marxhendrik.healthcheckcards.dagger.InjectingView
 import de.marxhendrik.healthcheckcards.dagger.getSubComponentBuilder
 import de.marxhendrik.healthcheckcards.feature.threecards.dagger.ThreeCardsComponent
 import de.marxhendrik.healthcheckcards.feature.threecards.ui.ThreeCardsContract.Card
+import de.marxhendrik.healthcheckcards.log
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.view_card_green.view.*
 import kotlinx.android.synthetic.main.view_card_orange.view.*
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.view_card_red.view.*
 import javax.inject.Inject
 
 const val ANIMATION_DURATION_MS = 300L
-private const val CENTERED_Z_TRANSLATION = 100f
+const val CENTERED_Z_TRANSLATION = 100f
 
 class ThreeCardsView @JvmOverloads constructor(context: Context, attr: AttributeSet? = null, style: Int = 0) :
         FrameLayout(context, attr, style),
@@ -56,9 +57,9 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
     }
 
     private fun initViews() {
-        vCardGreen.card = Card.Green()
-        vCardOrange.card = Card.Orange()
-        vCardRed.card = Card.Red()
+        vCardGreen.card = Card.Green({ vCardGreen.getCenterTranslation() }, { vCardGreen.getOutRightTranslation() })
+        vCardOrange.card = Card.Orange({ vCardOrange.getCenterTranslation() }, { vCardOrange.getOutRightTranslation() })
+        vCardRed.card = Card.Red({ vCardRed.getCenterTranslation() }, { vCardRed.getOutRightTranslation() })
     }
 
     override fun getClicks(): Observable<Card> = Observable.merge(
@@ -69,43 +70,29 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
 
     private fun cardClicks(view: SingleCardView) = RxView.clicks(view).map { view.card }
 
-    override fun unCenter(card: Card) = unCenter(cardToView.getValue(card))
 
-    override fun center(card: Card) = center(cardToView.getValue(card))
-
-    private fun unCenter(cardView: SingleCardView) {
-        animateTranslateX(cardView = cardView) {
-            viewsToRightOfDo(cardView) {
-                animateTranslateX(cardView = it, delay = ANIMATION_DURATION_MS)
-            }
-        }
-        animateTranslateZ(cardView = cardView, delay = ANIMATION_DURATION_MS)
-    }
-
-    private fun center(cardView: SingleCardView) {
-        viewsToRightOfDo(cardView) {
-            animateTranslateX(cardView = it, translation = it.getOutRightTranslation())
-        }
-        animateTranslateZ(cardView = cardView, translation = CENTERED_Z_TRANSLATION, delay = ANIMATION_DURATION_MS)
-        animateTranslateX(cardView = cardView, translation = cardView.getCenterTranslation(), delay = ANIMATION_DURATION_MS)
-    }
-
-    private inline fun viewsToRightOfDo(cardView: SingleCardView, func: (SingleCardView) -> Unit) {
+    override fun viewsToRightOfDo(card: Card, function: (Card) -> Unit) {
+        val cardView = cardToView.getValue(card)
+        log("clicked: $card : $cardView")
         cardToView.values
                 .filter { it != cardView }
                 .filter { it.isToRightOf(cardView) }
                 .forEach {
-                    func(it)
+                    log("    -> to right is: $it")
+                    function(it.card)
                 }
     }
 
-    private fun animateTranslateX(cardView: View, translation: Float = 0f, delay: Long = 0, callbackFunc: () -> Unit = {}) {
-        animateTranslate("X", cardView, translation, delay, callbackFunc = callbackFunc)
+    override fun animateTranslateZ(card: Card, translation: Float, delay: Long) {
+        val cardView = cardToView.getValue(card)
+        animateTranslate("Z", cardView, translation, delay)
     }
 
-    private fun animateTranslateZ(cardView: View, translation: Float = 0f, delay: Long = 0, callbackFunc: () -> Unit = {}) {
-        animateTranslate("Z", cardView, translation, delay, callbackFunc = callbackFunc)
+    override fun animateTranslateX(card: Card, translation: Float, delay: Long, function: () -> Unit) {
+        val cardView = cardToView.getValue(card)
+        animateTranslate("X", cardView, translation, delay, callbackFunc = function)
     }
+
 
     /*FIXME
     1. move animations to a util or something

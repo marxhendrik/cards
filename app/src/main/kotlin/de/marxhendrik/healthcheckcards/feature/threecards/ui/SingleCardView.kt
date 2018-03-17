@@ -11,7 +11,6 @@ class SingleCardView @JvmOverloads constructor(context: Context, attr: Attribute
     fun getCenterTranslation(): Float {
         val centerX = (left + right) / 2
         val screenCenter = resources.displayMetrics.widthPixels / 2
-
         return screenCenter.toFloat() - centerX
     }
 

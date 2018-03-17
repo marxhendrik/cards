@@ -1,5 +1,6 @@
 package de.marxhendrik.healthcheckcards.feature.threecards.ui
 
+import de.marxhendrik.healthcheckcards.feature.threecards.ui.ThreeCardsContract.Card
 import java.util.concurrent.TimeUnit
 
 class ThreeCardsPresenter(val view: ThreeCardsContract.View) : ThreeCardsContract.Presenter {
@@ -11,13 +12,32 @@ class ThreeCardsPresenter(val view: ThreeCardsContract.View) : ThreeCardsContrac
                 .subscribe(this::onCardClicked)
     }
 
-    private fun onCardClicked(it: ThreeCardsContract.Card) {
-        if (it.centered) {
-            view.unCenter(it)
+    private fun onCardClicked(card: Card) {
+        if (card.centered) {
+            unCenter(card)
         } else {
-            view.center(it)
+            center(card)
         }
 
-        it.centered = !it.centered
+        card.centered = !card.centered
+    }
+
+
+    private fun unCenter(card: Card) {
+        view.animateTranslateX(card = card) {
+            view.viewsToRightOfDo(card = card) {
+                view.animateTranslateX(card = it, delay = ANIMATION_DURATION_MS)
+            }
+        }
+
+        view.animateTranslateZ(card, delay = ANIMATION_DURATION_MS)
+    }
+
+    private fun center(card: Card) {
+        view.viewsToRightOfDo(card = card) {
+            view.animateTranslateX(card = it, translation = it.translationToRightEdge)
+        }
+        view.animateTranslateZ(card = card, translation = CENTERED_Z_TRANSLATION, delay = ANIMATION_DURATION_MS)
+        view.animateTranslateX(card = card, translation = card.translationToCentre, delay = ANIMATION_DURATION_MS)
     }
 }
