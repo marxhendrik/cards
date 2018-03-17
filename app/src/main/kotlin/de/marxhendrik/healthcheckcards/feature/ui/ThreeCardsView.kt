@@ -9,14 +9,15 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
 import com.jakewharton.rxbinding2.view.RxView
+import de.marxhendrik.healthcheckcards.dagger.InjectingView
+import de.marxhendrik.healthcheckcards.dagger.getSubComponentBuilder
+import de.marxhendrik.healthcheckcards.feature.dagger.ThreeCardsComponent
+import de.marxhendrik.healthcheckcards.feature.ui.ThreeCardsContract.Card
+import de.marxhendrik.healthcheckcards.feature.ui.ThreeCardsContract.Card.*
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.view_card_green.view.*
 import kotlinx.android.synthetic.main.view_card_orange.view.*
 import kotlinx.android.synthetic.main.view_card_red.view.*
-import de.marxhendrik.healthcheckcards.dagger.InjectingView
-import de.marxhendrik.healthcheckcards.dagger.getSubComponentBuilder
-import de.marxhendrik.healthcheckcards.feature.ui.ThreeCardsContract.Card
-import de.marxhendrik.healthcheckcards.feature.ui.ThreeCardsContract.Card.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
@@ -34,7 +35,7 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
 
     private val animating = AtomicBoolean(false)
 
-    private val cardToView: Map<Card, CardView> by lazy {
+    private val cardToView: Map<Card, SingleCardView> by lazy {
         mapOf(vCardGreen.card to vCardGreen, vCardOrange.card to vCardOrange, vCardRed.card to vCardRed)
     }
 
@@ -50,14 +51,14 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
 
     init {
         if (!isInEditMode) {
-            getSubComponentBuilder(CardsComponent.Builder::class)
+            getSubComponentBuilder(ThreeCardsComponent.Builder::class)
                     .view(this)
                     .build()
                     .inject(this)
         }
     }
 
-    private fun cardClicks(view: CardView) = RxView.clicks(view).map { view.card }
+    private fun cardClicks(view: SingleCardView) = RxView.clicks(view).map { view.card }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -79,8 +80,8 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
     }
 
     //move logic out of here into presenter FIXME
-    private fun animateFullScreen(cardView: CardView) {
-        val currentlyCentered: CardView? = cardToView.values.firstOrNull { it.centered }
+    private fun animateFullScreen(cardView: SingleCardView) {
+        val currentlyCentered: SingleCardView? = cardToView.values.firstOrNull { it.centered }
 
         if (cardView == currentlyCentered) {
             unCenter(cardView)
@@ -89,7 +90,7 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
         }
     }
 
-    private fun unCenter(cardView: CardView) {
+    private fun unCenter(cardView: SingleCardView) {
         animateTranslate(direction = "X", cardView = cardView, translation = 0.0f)
         animateTranslate(cardView = cardView, translation = 0.0f, delay = ANIMATION_DURATION)
 
@@ -102,7 +103,7 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
         cardView.centered = false
     }
 
-    private fun center(cardView: CardView) {
+    private fun center(cardView: SingleCardView) {
         cardView.centered = true
         cardToView.values
                 .filter { it != cardView }
@@ -135,14 +136,3 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
 }
 
 
-class CardView @JvmOverloads constructor(context: Context, attr: AttributeSet? = null, style: Int = 0) : View(context, attr, style) {
-    lateinit var card: Card
-    var centered: Boolean = false
-
-    fun getCenterTranslation(): Float {
-        val centerX = (left + right) / 2
-        val screenCenter = resources.displayMetrics.widthPixels / 2
-
-        return screenCenter.toFloat() - centerX
-    }
-}

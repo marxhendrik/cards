@@ -7,7 +7,7 @@ import de.marxhendrik.healthcheckcards.dagger.HasSubComponentBuilders
 import de.marxhendrik.healthcheckcards.dagger.SubComponentBuilderMap
 import javax.inject.Inject
 
-class CardsActivity : BaseActivity(), HasSubComponentBuilders {
+class ThreeCardsActivity : BaseActivity(), HasSubComponentBuilders {
 
     @Inject
     override lateinit var builders: SubComponentBuilderMap

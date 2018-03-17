@@ -1,11 +1,13 @@
-package de.marxhendrik.healthcheckcards.feature.ui
+package de.marxhendrik.healthcheckcards.feature.dagger
 
 import dagger.BindsInstance
 import dagger.Subcomponent
 import de.marxhendrik.healthcheckcards.dagger.SubComponentBuilder
+import de.marxhendrik.healthcheckcards.feature.ui.ThreeCardsContract
+import de.marxhendrik.healthcheckcards.feature.ui.ThreeCardsView
 
-@Subcomponent(modules = [CardsModule::class])
-interface CardsComponent {
+@Subcomponent(modules = [ThreeCardsModule::class])
+interface ThreeCardsComponent {
 
     fun inject(cardsView: ThreeCardsView)
 
@@ -14,6 +16,6 @@ interface CardsComponent {
         @BindsInstance
         fun view(view: ThreeCardsContract.View): Builder
 
-        fun build(): CardsComponent
+        fun build(): ThreeCardsComponent
     }
 }
