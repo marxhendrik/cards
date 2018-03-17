@@ -17,22 +17,16 @@ abstract class LifecycleAwarePresenter(lifecycleOwner: LifecycleOwner) : Lifecyc
         lifecycleOwner.lifecycle.addObserver(this)
     }
 
-    fun addDisposable(disposable: Disposable) {
-        onStopDisposable.add(disposable)
-    }
+    fun addDisposable(disposable: Disposable) = onStopDisposable.add(disposable)
 
     @OnLifecycleEvent(ON_START)
-    open fun onStart() {
-        log("onStart event")
-    }
+    open fun onStart() = log("onStart event")
+
 
     @OnLifecycleEvent(ON_STOP)
-    open fun onStop() {
-        log("onStop event")
-    }
+    open fun onStop() = log("onStop event")
+
 
     @OnLifecycleEvent(ON_STOP)
-    fun dispose() {
-        onStopDisposable.clear()
-    }
+    fun dispose() = onStopDisposable.clear()
 }
