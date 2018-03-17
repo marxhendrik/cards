@@ -7,7 +7,7 @@ import dagger.Provides
 class CardsModule {
 
     @Provides
-    fun providePresenter(view: CardsContract.View): CardsContract.Presenter {
+    fun providePresenter(view: ThreeCardsContract.View): ThreeCardsContract.Presenter {
         return CardsPresenter(view)
     }
 }

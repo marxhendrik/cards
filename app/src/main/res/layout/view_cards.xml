@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<marxhendrik.de.healthcheckcards.feature.ui.CardsView
+<marxhendrik.de.healthcheckcards.feature.ui.ThreeCardsView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
@@ -15,42 +14,47 @@
         android:orientation="horizontal">
 
         <include
-            android:id="@+id/vCardGreen"
             layout="@layout/view_card_green"
-            android:layout_width="300dp"
+            android:layout_width="@dimen/card_size"
             android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
         </include>
 
         <include
-            android:id="@+id/vCardOrange"
             layout="@layout/view_card_orange"
-            android:layout_width="300dp"
+            android:layout_width="@dimen/card_size"
             android:layout_height="match_parent"
-            android:layout_marginStart="126.6dp"
+            android:layout_marginStart="8dp"
             android:elevation="10dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guidelineOrange"
             app:layout_constraintTop_toTopOf="parent">
         </include>
 
         <include
-            android:id="@+id/vCardRed"
             layout="@layout/view_card_red"
-            android:layout_width="300dp"
+            android:layout_width="@dimen/card_size"
             android:layout_height="match_parent"
-            android:layout_marginStart="253.2dp"
+            android:layout_marginStart="8dp"
             android:elevation="20dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guidelineRed"
             app:layout_constraintTop_toTopOf="parent">
         </include>
 
         <android.support.constraint.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="match_constraint"
+            android:id="@+id/guidelineRed"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="20dp"/>
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.66"/>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guidelineOrange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.33"/>
+
     </android.support.constraint.ConstraintLayout>
 
-</marxhendrik.de.healthcheckcards.feature.ui.CardsView>
+</marxhendrik.de.healthcheckcards.feature.ui.ThreeCardsView>

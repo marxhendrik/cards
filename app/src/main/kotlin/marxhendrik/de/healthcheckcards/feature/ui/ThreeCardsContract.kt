@@ -2,14 +2,18 @@ package marxhendrik.de.healthcheckcards.feature.ui
 
 import io.reactivex.Observable
 
-interface CardsContract {
+interface ThreeCardsContract {
     interface Presenter {
         fun start()
     }
 
     interface View {
-        val clicks: Observable<CardsView.Card>
-        fun showFullScreen(it: CardsView.Card)
+        val clicks: Observable<Card>
+        fun showFullScreen(it: Card)
     }
 
+
+    enum class Card {
+        GREEN, ORANGE, RED
+    }
 }

@@ -7,12 +7,12 @@ import marxhendrik.de.healthcheckcards.dagger.SubComponentBuilder
 @Subcomponent(modules = [CardsModule::class])
 interface CardsComponent {
 
-    fun inject(cardsView: CardsView)
+    fun inject(cardsView: ThreeCardsView)
 
     @Subcomponent.Builder
     interface Builder : SubComponentBuilder {
         @BindsInstance
-        fun view(view: CardsContract.View): Builder
+        fun view(view: ThreeCardsContract.View): Builder
 
         fun build(): CardsComponent
     }

@@ -2,4 +2,5 @@
 <resources>
     <dimen name="card_dashwitdth">5dp</dimen>
     <dimen name="card_corner_radius">10dp</dimen>
+    <dimen name="card_size">350dp</dimen>
 </resources>
