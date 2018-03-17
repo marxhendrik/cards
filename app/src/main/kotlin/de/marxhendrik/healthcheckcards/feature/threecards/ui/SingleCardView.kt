@@ -6,7 +6,7 @@ import android.view.View
 
 class SingleCardView @JvmOverloads constructor(context: Context, attr: AttributeSet? = null, style: Int = 0) : View(context, attr, style) {
 
-    lateinit var card: ThreeCardsContract.Card
+    lateinit var card: Card
 
     fun getCenterTranslation(): Float {
         val centerX = (left + right) / 2

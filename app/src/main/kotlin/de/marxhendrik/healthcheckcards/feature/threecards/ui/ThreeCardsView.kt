@@ -12,16 +12,11 @@ import com.jakewharton.rxbinding2.view.RxView
 import de.marxhendrik.healthcheckcards.dagger.InjectingView
 import de.marxhendrik.healthcheckcards.dagger.getSubComponentBuilder
 import de.marxhendrik.healthcheckcards.feature.threecards.dagger.ThreeCardsComponent
-import de.marxhendrik.healthcheckcards.feature.threecards.ui.ThreeCardsContract.Card
-import de.marxhendrik.healthcheckcards.log
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.view_card_green.view.*
 import kotlinx.android.synthetic.main.view_card_orange.view.*
 import kotlinx.android.synthetic.main.view_card_red.view.*
 import javax.inject.Inject
-
-const val ANIMATION_DURATION_MS = 300L
-const val CENTERED_Z_TRANSLATION = 100f
 
 class ThreeCardsView @JvmOverloads constructor(context: Context, attr: AttributeSet? = null, style: Int = 0) :
         FrameLayout(context, attr, style),
@@ -71,16 +66,12 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
     private fun cardClicks(view: SingleCardView) = RxView.clicks(view).map { view.card }
 
 
-    override fun viewsToRightOfDo(card: Card, function: (Card) -> Unit) {
-        val cardView = cardToView.getValue(card)
-        log("clicked: $card : $cardView")
-        cardToView.values
-                .filter { it != cardView }
-                .filter { it.isToRightOf(cardView) }
-                .forEach {
-                    log("    -> to right is: $it")
-                    function(it.card)
-                }
+    override fun isToRightOf(card: Card, otherCard: Card): Boolean {
+        return cardToView.getValue(otherCard).isToRightOf(cardToView.getValue(card))
+    }
+
+    override fun getCards(): Set<Card> {
+        return cardToView.keys
     }
 
     override fun animateTranslateZ(card: Card, translation: Float, delay: Long) {
@@ -92,7 +83,6 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
         val cardView = cardToView.getValue(card)
         animateTranslate("X", cardView, translation, delay, callbackFunc = function)
     }
-
 
     /*FIXME
     1. move animations to a util or something
