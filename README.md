@@ -1,6 +1,8 @@
 # HealthCheck app
 
-A simple app that shows three cards in traffic light colors and highlights a Card when clicked upon. This app showcases some Architectural Examples:
+A simple (?) app that shows three cards in traffic light colors and highlights a card when clicked upon.
+ 
+This app showcases some architectural examples:
 
 ## MVP 
 
@@ -12,13 +14,12 @@ A simple app that shows three cards in traffic light colors and highlights a Car
 ## SubComponents with dagger
 
 1. Sub-Views can have their own Components/Modules/Scopes
-2. The Android View classes themselves are unaware of their Modules, Parent Components, Parent View etc.
-3. SubComponentBuilders are provided by the Activity for all Views in the hierarchy
-4. Activities use AndroidInjection via a BaseActivity
+2. The Android *View* classes themselves are unaware of their modules, parent components, parent *View* etc.
+3. SubComponentBuilders are provided along common dependencies by the feature-Activity for all Views in the hierarchy
+4. Activities use AndroidInjection via a *BaseActivity* class
 
 
 ## Remarks
 
-
-1. We do not use Daggers Map Multibinding to provide the Map of *SubComponentBuilders* because there is a lot ceremony involded like defining the Key Annotation and an extra 
-abstract Module class to use abstract *@Binds* methods. It just seems less natural to do this for this setup
+1. We do not use Daggers "Map Multibinding" to provide the Map of *SubComponentBuilders* because there is a lot of ceremony involved like defining the key annotation and an extra 
+abstract Module class to use abstract *@Binds* methods in. It just seems less natural and more complicated to do for this usecase
