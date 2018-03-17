@@ -46,14 +46,12 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
 
     private fun cardClicks(view: SingleCardView) = RxView.clicks(view).map { view }
 
-    override fun isToRightOf(card: SingleCardContract.View, otherCard: SingleCardContract.View) = otherCard.isToRightOf(card)
-
-    override fun animateTranslateZ(card: SingleCardContract.View, translation: Float, delay: Long) {
-        (card as SingleCardView).animateTranslate("Z", translation, delay)
+    override fun animateTranslateZ(card: SingleCardContract.View, translation: Float, animationDuration: Long, delay: Long) {
+        (card as SingleCardView).animateTranslate("Z", translation, animationDuration, delay)
     }
 
-    override fun animateTranslateX(card: SingleCardContract.View, translation: Float, delay: Long, function: () -> Unit) {
-        (card as SingleCardView).animateTranslate("X", translation, delay, callbackFunc = function)
+    override fun animateTranslateX(card: SingleCardContract.View, translation: Float, animationDuration: Long, delay: Long, function: () -> Unit) {
+        (card as SingleCardView).animateTranslate("X", translation, delay, animationDuration, callbackFunc = function)
     }
 }
 

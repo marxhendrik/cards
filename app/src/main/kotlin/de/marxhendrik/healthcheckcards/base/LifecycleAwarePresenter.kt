@@ -5,7 +5,6 @@ import android.arch.lifecycle.Lifecycle.Event.ON_STOP
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.OnLifecycleEvent
-import de.marxhendrik.healthcheckcards.log
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -20,12 +19,12 @@ abstract class LifecycleAwarePresenter(lifecycleOwner: LifecycleOwner) : Lifecyc
     fun addDisposable(disposable: Disposable) = onStopDisposable.add(disposable)
 
     @OnLifecycleEvent(ON_START)
-    open fun onStart() = log("onStart event")
-
+    open fun onStart() {
+    }
 
     @OnLifecycleEvent(ON_STOP)
-    open fun onStop() = log("onStop event")
-
+    open fun onStop() {
+    }
 
     @OnLifecycleEvent(ON_STOP)
     fun dispose() = onStopDisposable.clear()

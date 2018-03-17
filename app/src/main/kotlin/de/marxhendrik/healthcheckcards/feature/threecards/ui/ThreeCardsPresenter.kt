@@ -2,7 +2,7 @@ package de.marxhendrik.healthcheckcards.feature.threecards.ui
 
 import android.arch.lifecycle.LifecycleOwner
 import de.marxhendrik.healthcheckcards.base.LifecycleAwarePresenter
-import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardContract.View
+import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardContract
 import java.util.concurrent.TimeUnit
 
 //Unit Tests FIXME
@@ -12,13 +12,12 @@ class ThreeCardsPresenter(
 
 
     override fun onStart() {
-        super.onStart()
         addDisposable(view.getClicks()
                 .throttleFirst(ANIMATION_DURATION_MS, TimeUnit.MILLISECONDS)
                 .subscribe(this::onCardClicked))
     }
 
-    private fun onCardClicked(card: View) {
+    private fun onCardClicked(card: SingleCardContract.View) {
         if (card.centered) {
             unCenter(card)
         } else {
@@ -29,30 +28,44 @@ class ThreeCardsPresenter(
     }
 
 
-    private fun unCenter(card: View) {
-        view.animateTranslateX(card = card) {
-            viewsToTheRightOfCardDo(card = card) {
-                view.animateTranslateX(card = it, delay = ANIMATION_DURATION_MS)
+    private fun unCenter(card: SingleCardContract.View) {
+        card.animateToOriginalX {
+            card.forEachViewOnRightSide {
+                it.animateToOriginalX(delay = ANIMATION_DURATION_MS)
             }
         }
-
-        view.animateTranslateZ(card, delay = ANIMATION_DURATION_MS)
+        card.animateToBack()
     }
 
-    private fun center(card: View) {
-        viewsToTheRightOfCardDo(card = card) {
-            view.animateTranslateX(card = it, translation = it.getOutRightTranslation())
+    private fun center(card: SingleCardContract.View) {
+        card.forEachViewOnRightSide {
+            it.animateOutRight()
         }
-        view.animateTranslateZ(card = card, translation = CENTERED_Z_TRANSLATION, delay = ANIMATION_DURATION_MS)
-        view.animateTranslateX(card = card, translation = card.getCenterTranslation(), delay = ANIMATION_DURATION_MS)
+        card.animateToFront()
+        card.animateCenter()
     }
 
-    private fun viewsToTheRightOfCardDo(card: View, func: (View) -> Unit) {
+    private fun SingleCardContract.View.forEachViewOnRightSide(func: (SingleCardContract.View) -> Unit) {
         view.cards
-                .filter { card != it }
-                .filter { view.isToRightOf(card, it) }
+                .filter { this != it }
+                .filter { it.isToRightOf(this) }
                 .forEach {
                     func(it)
                 }
     }
+
+    private fun SingleCardContract.View.animateToOriginalX(delay: Long = 0, func: () -> Unit = {}) =
+            view.animateTranslateX(card = this, animationDuration = ANIMATION_DURATION_MS, delay = delay, function = func)
+
+    private fun SingleCardContract.View.animateCenter() =
+            view.animateTranslateX(card = this, translation = this.getCenterTranslation(), animationDuration = ANIMATION_DURATION_MS, delay = ANIMATION_DURATION_MS)
+
+    private fun SingleCardContract.View.animateToFront() =
+            view.animateTranslateZ(card = this, translation = CENTERED_Z_TRANSLATION, animationDuration = ANIMATION_DURATION_MS, delay = ANIMATION_DURATION_MS)
+
+    private fun SingleCardContract.View.animateToBack() =
+            view.animateTranslateZ(card = this, animationDuration = ANIMATION_DURATION_MS, delay = ANIMATION_DURATION_MS)
+
+    private fun SingleCardContract.View.animateOutRight(delay: Long = 0) =
+            view.animateTranslateX(card = this, animationDuration = ANIMATION_DURATION_MS, delay = delay, translation = this.getOutRightTranslation())
 }

@@ -4,8 +4,8 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.view.animation.AccelerateDecelerateInterpolator
-import de.marxhendrik.healthcheckcards.feature.threecards.ui.ANIMATION_DURATION_MS
 import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardView
+import de.marxhendrik.healthcheckcards.feature.threecards.ui.ANIMATION_DURATION_MS
 
 
 fun SingleCardView?.animateTranslate(
