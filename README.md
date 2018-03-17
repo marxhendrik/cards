@@ -19,6 +19,9 @@ This app showcases some architectural examples:
 4. Activities use AndroidInjection via a *BaseActivity* class
 5. A set of helper functions and classes reduces some boilerplate and makes injection easy from the perspective of the involved classes (see *InjectionTools.kt*)
 
+## AAC LifecycleOwner/Observer
+
+1. A LifecycleAwarePresenter base class manages rx.Disposables. A LifecycleOwner has to be provided in the constructor.
 
 ## Remarks
 
