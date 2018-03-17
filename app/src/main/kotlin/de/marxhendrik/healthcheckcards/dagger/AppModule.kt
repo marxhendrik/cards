@@ -2,7 +2,7 @@ package de.marxhendrik.healthcheckcards.dagger
 
 import dagger.Module
 import dagger.android.AndroidInjectionModule
-import de.marxhendrik.healthcheckcards.feature.dagger.CardsActivityBuildersModule
+import de.marxhendrik.healthcheckcards.feature.threecards.dagger.CardsActivityBuildersModule
 import javax.inject.Scope
 import kotlin.annotation.AnnotationRetention.RUNTIME
 

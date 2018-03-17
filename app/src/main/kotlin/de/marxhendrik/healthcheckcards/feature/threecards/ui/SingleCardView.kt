@@ -1,4 +1,4 @@
-package de.marxhendrik.healthcheckcards.feature.ui
+package de.marxhendrik.healthcheckcards.feature.threecards.ui
 
 import android.content.Context
 import android.util.AttributeSet

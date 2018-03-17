@@ -1,9 +1,9 @@
-package de.marxhendrik.healthcheckcards.feature.dagger
+package de.marxhendrik.healthcheckcards.feature.threecards.dagger
 
 import dagger.Module
 import dagger.Provides
-import de.marxhendrik.healthcheckcards.feature.ui.ThreeCardsContract
-import de.marxhendrik.healthcheckcards.feature.ui.ThreeCardsPresenter
+import de.marxhendrik.healthcheckcards.feature.threecards.ui.ThreeCardsContract
+import de.marxhendrik.healthcheckcards.feature.threecards.ui.ThreeCardsPresenter
 
 @Module
 class ThreeCardsModule {

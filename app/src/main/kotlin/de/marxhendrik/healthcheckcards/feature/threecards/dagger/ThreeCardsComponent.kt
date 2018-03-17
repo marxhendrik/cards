@@ -1,10 +1,10 @@
-package de.marxhendrik.healthcheckcards.feature.dagger
+package de.marxhendrik.healthcheckcards.feature.threecards.dagger
 
 import dagger.BindsInstance
 import dagger.Subcomponent
 import de.marxhendrik.healthcheckcards.dagger.SubComponentBuilder
-import de.marxhendrik.healthcheckcards.feature.ui.ThreeCardsContract
-import de.marxhendrik.healthcheckcards.feature.ui.ThreeCardsView
+import de.marxhendrik.healthcheckcards.feature.threecards.ui.ThreeCardsContract
+import de.marxhendrik.healthcheckcards.feature.threecards.ui.ThreeCardsView
 
 @Subcomponent(modules = [ThreeCardsModule::class])
 interface ThreeCardsComponent {

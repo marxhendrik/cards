@@ -1,4 +1,4 @@
-package de.marxhendrik.healthcheckcards.feature.ui
+package de.marxhendrik.healthcheckcards.feature.threecards.ui
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -11,9 +11,9 @@ import android.widget.FrameLayout
 import com.jakewharton.rxbinding2.view.RxView
 import de.marxhendrik.healthcheckcards.dagger.InjectingView
 import de.marxhendrik.healthcheckcards.dagger.getSubComponentBuilder
-import de.marxhendrik.healthcheckcards.feature.dagger.ThreeCardsComponent
-import de.marxhendrik.healthcheckcards.feature.ui.ThreeCardsContract.Card
-import de.marxhendrik.healthcheckcards.feature.ui.ThreeCardsContract.Card.*
+import de.marxhendrik.healthcheckcards.feature.threecards.dagger.ThreeCardsComponent
+import de.marxhendrik.healthcheckcards.feature.threecards.ui.ThreeCardsContract.Card
+import de.marxhendrik.healthcheckcards.feature.threecards.ui.ThreeCardsContract.Card.*
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.view_card_green.view.*
 import kotlinx.android.synthetic.main.view_card_orange.view.*

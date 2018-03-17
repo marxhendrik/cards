@@ -1,4 +1,4 @@
-package de.marxhendrik.healthcheckcards.feature.ui
+package de.marxhendrik.healthcheckcards.feature.threecards.ui
 
 class ThreeCardsPresenter(val view: ThreeCardsContract.View) : ThreeCardsContract.Presenter {
     override fun start() {

@@ -1,10 +1,10 @@
-package de.marxhendrik.healthcheckcards.feature.dagger
+package de.marxhendrik.healthcheckcards.feature.threecards.dagger
 
 import dagger.Module
 import dagger.Provides
 import dagger.android.ContributesAndroidInjector
 import de.marxhendrik.healthcheckcards.dagger.SubComponentBuilderMap
-import de.marxhendrik.healthcheckcards.feature.ui.ThreeCardsActivity
+import de.marxhendrik.healthcheckcards.feature.threecards.ui.ThreeCardsActivity
 
 @Module(subcomponents = [ThreeCardsComponent::class])
 class ThreeCardsActivityModule {

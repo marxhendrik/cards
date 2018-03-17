@@ -1,4 +1,4 @@
-package de.marxhendrik.healthcheckcards.feature.ui
+package de.marxhendrik.healthcheckcards.feature.threecards.ui
 
 import android.os.Bundle
 import de.marxhendrik.healthcheckcards.R
