@@ -11,6 +11,5 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
 annotation class PerApplication
 
 
-@PerApplication
 @Module(includes = [AndroidInjectionModule::class, CardsActivityBuildersModule::class])
 class AppModule

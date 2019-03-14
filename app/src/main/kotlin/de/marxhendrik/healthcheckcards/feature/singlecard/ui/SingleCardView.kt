@@ -4,12 +4,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import de.marxhendrik.healthcheckcards.dagger.InjectingView
-import de.marxhendrik.healthcheckcards.dagger.getSubComponentBuilder
+import de.marxhendrik.healthcheckcards.dagger.getComponentBuilder
 import de.marxhendrik.healthcheckcards.feature.singlecard.dagger.SingleCardComponent
 import javax.inject.Inject
 
 class SingleCardView @JvmOverloads constructor(context: Context, attr: AttributeSet? = null, style: Int = 0) :
-        View(context, attr, style), SingleCardContract.View, InjectingView {
+    View(context, attr, style), SingleCardContract.View, InjectingView {
 
     override val left: Float
         get() = getLeft().toFloat()
@@ -27,10 +27,10 @@ class SingleCardView @JvmOverloads constructor(context: Context, attr: Attribute
     lateinit var presenter: SingleCardContract.Presenter
 
     init {
-        getSubComponentBuilder(SingleCardComponent.Builder::class)
-                .view(this)
-                .build()
-                .inject(this)
+        getComponentBuilder<SingleCardComponent.Builder>()
+            .view(this)
+            .build()
+            .inject(this)
     }
 
     override fun getCenterTranslation() = presenter.getCenterTranslation()

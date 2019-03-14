@@ -6,7 +6,9 @@ import dagger.Provides
 import dagger.android.ContributesAndroidInjector
 import de.marxhendrik.healthcheckcards.dagger.SubComponentBuilderMap
 import de.marxhendrik.healthcheckcards.feature.singlecard.dagger.SingleCardComponent
+import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardView
 import de.marxhendrik.healthcheckcards.feature.threecards.ui.ThreeCardsActivity
+import de.marxhendrik.healthcheckcards.feature.threecards.ui.ThreeCardsView
 import javax.inject.Qualifier
 
 @Module(subcomponents = [ThreeCardsComponent::class, SingleCardComponent::class])
@@ -14,8 +16,8 @@ class ThreeCardsActivityModule {
     @Provides
     fun provideSubComponentBuilders(threeCardsBuilder: ThreeCardsComponent.Builder, singleCardsBuilder: SingleCardComponent.Builder): SubComponentBuilderMap {
         val subComponentBuilderMap = SubComponentBuilderMap()
-        subComponentBuilderMap[ThreeCardsComponent.Builder::class] = threeCardsBuilder
-        subComponentBuilderMap[SingleCardComponent.Builder::class] = singleCardsBuilder
+        subComponentBuilderMap[ThreeCardsView::class.java] = threeCardsBuilder
+        subComponentBuilderMap[SingleCardView::class.java] = singleCardsBuilder
         return subComponentBuilderMap
     }
 
