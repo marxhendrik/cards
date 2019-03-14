@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <include
+        layout="@layout/view_card_green"
+        android:layout_width="@dimen/card_size"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></include>
+
+    <include
+        layout="@layout/view_card_orange"
+        android:layout_width="@dimen/card_size"
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:elevation="10dp"
+        app:layout_constraintStart_toStartOf="@+id/guidelineOrange"
+        app:layout_constraintTop_toTopOf="parent"></include>
+
+    <include
+        layout="@layout/view_card_red"
+        android:layout_width="@dimen/card_size"
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:elevation="20dp"
+        app:layout_constraintStart_toStartOf="@+id/guidelineRed"
+        app:layout_constraintTop_toTopOf="parent"></include>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelineRed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.66" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelineOrange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.33" />
+
+</android.support.constraint.ConstraintLayout>
