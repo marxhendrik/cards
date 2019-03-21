@@ -1,31 +1,33 @@
 package de.marxhendrik.healthcheckcards.base
 
-import android.arch.lifecycle.Lifecycle.Event.ON_START
+import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.Lifecycle.Event.ON_STOP
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.OnLifecycleEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class LifecycleAwarePresenter(lifecycleOwner: LifecycleOwner) : LifecycleObserver {
+abstract class LifecycleAwarePresenter : LifecycleAware {
 
     private val onStopDisposable = CompositeDisposable()
 
-    init {
-        lifecycleOwner.lifecycle.addObserver(this)
-    }
-
     fun addDisposable(disposable: Disposable) = onStopDisposable.add(disposable)
 
-    @OnLifecycleEvent(ON_START)
-    open fun onStart() {
+    fun Disposable.manage(event: Lifecycle.Event = ON_STOP) {
+        when (event) {
+            ON_STOP -> onStopDisposable.add(this)
+            else -> throw NotImplementedError("only ON_STOP is managed")
+        }
     }
 
-    @OnLifecycleEvent(ON_STOP)
-    open fun onStop() {
+    override fun onAttach() {
     }
 
-    @OnLifecycleEvent(ON_STOP)
-    fun dispose() = onStopDisposable.clear()
+    override fun onStart() {
+    }
+
+    override fun onStop() {
+        onStopDisposable.clear()
+    }
+
+    override fun onDetach() {
+    }
 }

@@ -1,20 +1,27 @@
 package de.marxhendrik.healthcheckcards.feature.singlecard.ui
 
 import com.jakewharton.rxrelay2.Relay
+import de.marxhendrik.healthcheckcards.base.LifecycleAwarePresenter
+import de.marxhendrik.healthcheckcards.base.ViewLifecycle
 
 class SingleCardPresenter(
     private val animationCommandRelay: Relay<SingleCardAnimationCommand>,
-    private val view: SingleCardContract.View
-) : SingleCardContract.Presenter {
+    private val view: SingleCardContract.View,
+    viewLifecycle: ViewLifecycle
+) : SingleCardContract.Presenter, LifecycleAwarePresenter() {
 
     private var centered: Boolean = false
     private val cardIndex: Int = view.getIndex()
 
-    //FIXME lifecycle
     init {
-        animationCommandRelay.subscribe {
-            animate(it.index)
-        }
+        viewLifecycle.register(this)
+    }
+
+    override fun onStart() {
+        animationCommandRelay
+            .subscribe {
+                animate(it.index)
+            }.manage()
     }
 
     private fun animate(index: Int) {
