@@ -9,7 +9,8 @@ This app showcases some architectural examples:
 1. Views are the root of the MVP, create the Component via the builder and are thus in charge of the dependencies in their scope
 2. Every view has as little logic as possible and delegates logical decisions to its presenters
 3. Presenters are free of View/Android classes, so that they can be easily unit tested
-4. Views can have sub-views with their own Presenters, Modules and Scopes, that they should only expose to other components (like their presenter) via the Sub-Views interface
+4. Views can have sub-views with their own Presenters, Modules and Scopes, that they should not expose to other components.
+
 
 ## SubComponents with dagger
 
@@ -27,3 +28,10 @@ This app showcases some architectural examples:
 
 1. We do not use Daggers "Map Multibinding" to provide the Map of *SubComponentBuilders* because there is a lot of ceremony involved like defining the key annotation and an extra 
 abstract Module class to use abstract *@Binds* methods in. It just seems less natural and more complicated to do for this usecase
+
+
+## Coming up: Forks
+ * TODO Base Readme here will direct to MVP fork with the content of this Readme
+ * TODO Base Readme will explain requirements of the architecture and a quick summary of the forks
+ * TODO MVVM-classic fork
+ * TODO MVVM without fragments fork (???)
