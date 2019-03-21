@@ -1,11 +1,13 @@
 package de.marxhendrik.healthcheckcards.feature.singlecard.ui
 
+import com.jakewharton.rxrelay2.PublishRelay
+import com.nhaarman.mockito_kotlin.eq
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import de.marxhendrik.healthcheckcards.base.ViewLifecycle
 import de.marxhendrik.testbase.BaseTest
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
@@ -14,69 +16,64 @@ class SingleCardPresenterTest : BaseTest() {
 
     private lateinit var presenter: SingleCardPresenter
 
-    private val view = mock<SingleCardContract.View>()
-
-    private val screenWidth: Float = 400f
-    private val viewLeft: Float = 100f
-    private val viewRight: Float = 200f
+    private val view: SingleCardView = mock()
+    private val animationCommandRelay = PublishRelay.create<SingleCardAnimationCommand>()
+    private val viewLifecycle: ViewLifecycle = mock()
 
     @Before
     override fun setup() {
         super.setup()
-        presenter = SingleCardPresenter(screenWidth = screenWidth, view = view)
+        presenter = SingleCardPresenter(animationCommandRelay, view, viewLifecycle)
     }
-
 
     @After
     override fun teardown() {
         super.teardown()
     }
 
-
     @Test
-    fun getCentered() {
-        presenter.centered = true
-        assertEquals(true, presenter.centered)
+    fun `construct presenter - manage lifecycle`() {
+        verify(viewLifecycle).register(eq(presenter))
     }
 
     @Test
-    fun getCenterTranslation() {
-        whenever(view.left).thenReturn(viewLeft)
-        whenever(view.right).thenReturn(viewRight)
-        val translation = presenter.getCenterTranslation()
-        assertEquals(screenWidth / 2 - (viewLeft + viewRight) / 2, translation)
-        verify(view).left
-        verify(view).right
-    }
+    fun `receive command - this index - uncentered - center card`() {
+        val index = 0
+        whenever(view.getIndex()).thenReturn(index)
 
+        presenter.onStart()
+        animationCommandRelay.accept(SingleCardAnimationCommand(index))
 
-    @Test
-    fun `isToRightOf - true`() {
-        val view2 = mock<SingleCardContract.View>()
-        whenever(view.left).thenReturn(viewLeft)
-        whenever(view.right).thenReturn(viewRight)
-        whenever(view2.getCenterTranslation()).thenReturn(100f)
-        val toRightOf = presenter.isToRightOf(view2)
-        verify(view2).getCenterTranslation()
-        assertEquals(true, toRightOf)
+        verify(view).animateToFront()
+        verify(view).animateCenter()
     }
 
     @Test
-    fun `isToRightOf - false`() {
-        val view2 = mock<SingleCardContract.View>()
-        whenever(view.left).thenReturn(viewLeft)
-        whenever(view.right).thenReturn(viewRight)
-        whenever(view2.getCenterTranslation()).thenReturn(-100f)
-        val toRightOf = presenter.isToRightOf(view2)
-        verify(view2).getCenterTranslation()
-        assertEquals(false, toRightOf)
+    fun `receive command - this index - centered - uncenter card`() {
+        val index = 0
+        whenever(view.getIndex()).thenReturn(index)
+
+        presenter.onStart()
+        //center card
+        animationCommandRelay.accept(SingleCardAnimationCommand(index))
+        //uncenter card
+        animationCommandRelay.accept(SingleCardAnimationCommand(index))
+
+        verify(view).animateToOriginalX()
+        verify(view).animateToBack()
     }
 
-
     @Test
-    fun getOutRightTranslation() {
-        whenever(view.left).thenReturn(viewLeft)
-        assertEquals(screenWidth - viewLeft, presenter.getOutRightTranslation())
+    fun `receive command - not this index - uncenter card`() {
+        val index = 0
+        val commandIndex = 1
+        whenever(view.getIndex()).thenReturn(index)
+
+        presenter.onStart()
+        animationCommandRelay.accept(SingleCardAnimationCommand(commandIndex))
+
+        verify(view).animateToOriginalX()
+        verify(view).animateToBack()
     }
 
 }
