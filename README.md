@@ -2,7 +2,11 @@
 
 A simple (?) app that shows three cards in traffic light colors and highlights a card when clicked upon.
  
-This app showcases some architectural examples:
+This code showcases some architectural examples and experiments that are not necessarily recommended approaches.
+
+## Requirements
+1. TODO: formulate the requirements of the app regardless of architecture
+
 
 ## MVP 
 
@@ -23,6 +27,7 @@ This app showcases some architectural examples:
 ## AAC LifecycleOwner/Observer
 
 1. A LifecycleAwarePresenter base class manages rx.Disposables. A LifecycleOwner has to be provided in the constructor.
+2. ViewLifecycle is required to make sure that the lifecycle events (attach/detach) are called when view is added removed
 
 ## Remarks
 
