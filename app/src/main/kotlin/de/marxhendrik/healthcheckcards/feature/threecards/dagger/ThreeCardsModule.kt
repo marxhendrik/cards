@@ -1,16 +1,23 @@
 package de.marxhendrik.healthcheckcards.feature.threecards.dagger
 
 import android.arch.lifecycle.LifecycleOwner
+import com.jakewharton.rxrelay2.PublishRelay
 import dagger.Module
 import dagger.Provides
+import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardAnimationCommand
 import de.marxhendrik.healthcheckcards.feature.threecards.ui.ThreeCardsContract
 import de.marxhendrik.healthcheckcards.feature.threecards.ui.ThreeCardsPresenter
 
 @Module
-class ThreeCardsModule {
+object ThreeCardsModule {
 
     @Provides
-    fun providePresenter(view: ThreeCardsContract.View, lifecycleOwner: LifecycleOwner): ThreeCardsContract.Presenter {
-        return ThreeCardsPresenter(view, lifecycleOwner)
+    @JvmStatic
+    fun providePresenter(
+        view: ThreeCardsContract.View,
+        lifecycleOwner: LifecycleOwner,
+        animationCommandRelay: PublishRelay<SingleCardAnimationCommand>
+    ): ThreeCardsContract.Presenter {
+        return ThreeCardsPresenter(view, animationCommandRelay, lifecycleOwner)
     }
 }

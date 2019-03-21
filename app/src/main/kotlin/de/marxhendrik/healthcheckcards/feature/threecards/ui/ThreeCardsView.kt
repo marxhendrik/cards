@@ -30,8 +30,8 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
         View.inflate(context, R.layout.view_cards_content, this)
     }
 
-    override val cards: Set<SingleCardContract.View> by lazy {
-        setOf(vCardGreen, vCardOrange, vCardRed)
+    private val cards: List<SingleCardContract.View> by lazy {
+        listOf(vCardGreen, vCardOrange, vCardRed)
     }
 
     init {
@@ -43,11 +43,11 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
         }
     }
 
-    override fun getClicks(): Observable<SingleCardContract.View> = Observable.merge(
+    override fun getClicks(): Observable<Int> = Observable.merge(
         cardClicks(vCardGreen),
         cardClicks(vCardOrange),
         cardClicks(vCardRed)
-    )
+    ).map { cards.indexOf(it) }
 
     private fun cardClicks(view: SingleCardView) = RxView.clicks(view).map { view }
 

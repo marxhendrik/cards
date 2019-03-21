@@ -1,19 +1,14 @@
 package de.marxhendrik.healthcheckcards.feature.singlecard.ui
 
 interface SingleCardContract {
-    interface Presenter {
-        var centered: Boolean
-        fun getCenterTranslation(): Float
-        fun isToRightOf(card: View): Boolean
-        fun getOutRightTranslation(): Float
-    }
+    interface Presenter
 
     interface View {
-        val left: Float
-        val right: Float
-        var centered: Boolean
-        fun getCenterTranslation(): Float
-        fun isToRightOf(card: View): Boolean
-        fun getOutRightTranslation(): Float
+        fun animateToOriginalX(delay: Long = 0, func: () -> Unit = {})
+        fun animateCenter()
+        fun animateToFront()
+        fun animateToBack()
+        fun animateOutRight(delay: Long = 0)
+        fun getIndex(): Int
     }
 }

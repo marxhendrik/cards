@@ -1,17 +1,51 @@
 package de.marxhendrik.healthcheckcards.feature.singlecard.ui
 
-class SingleCardPresenter(
-        private val screenWidth: Float,
-        private val view: SingleCardContract.View) : SingleCardContract.Presenter {
-    override var centered: Boolean = false
+import com.jakewharton.rxrelay2.Relay
 
-    override fun getCenterTranslation(): Float {
-        val centerX = (view.left + view.right) / 2
-        val screenCenter = screenWidth / 2
-        return screenCenter - centerX
+class SingleCardPresenter(
+    private val animationCommandRelay: Relay<SingleCardAnimationCommand>,
+    private val view: SingleCardContract.View
+) : SingleCardContract.Presenter {
+
+    private var centered: Boolean = false
+    private val cardIndex: Int = view.getIndex()
+
+    //FIXME lifecycle
+    init {
+        animationCommandRelay.subscribe {
+            animate(it.index)
+        }
     }
 
-    override fun isToRightOf(card: SingleCardContract.View) = getCenterTranslation() - card.getCenterTranslation() <= 0
+    private fun animate(index: Int) {
+        if (cardIndex == index) {
+            toggleCentered()
+        } else {
+            unCenter()
+        }
+    }
 
-    override fun getOutRightTranslation() = screenWidth - view.left
+    private fun toggleCentered() {
+        if (centered) {
+            unCenter()
+        } else {
+            center()
+        }
+
+        centered = !centered
+    }
+
+    private fun unCenter() {
+        view.animateToOriginalX()
+        view.animateToBack()
+    }
+
+    private fun center() {
+        view.animateToFront()
+        view.animateCenter()
+    }
+
 }
+
+data class SingleCardAnimationCommand(val index: Int)
+

@@ -1,19 +1,24 @@
 package de.marxhendrik.healthcheckcards.feature.threecards.dagger
 
 import android.arch.lifecycle.LifecycleOwner
+import com.jakewharton.rxrelay2.PublishRelay
 import dagger.Module
 import dagger.Provides
 import dagger.android.ContributesAndroidInjector
 import de.marxhendrik.healthcheckcards.dagger.SubComponentBuilderMap
 import de.marxhendrik.healthcheckcards.feature.singlecard.dagger.SingleCardComponent
+import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardAnimationCommand
 import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardView
 import de.marxhendrik.healthcheckcards.feature.threecards.ui.ThreeCardsActivity
 import de.marxhendrik.healthcheckcards.feature.threecards.ui.ThreeCardsView
-import javax.inject.Qualifier
+import javax.inject.Scope
+import kotlin.annotation.AnnotationRetention.RUNTIME
 
 @Module(subcomponents = [ThreeCardsComponent::class, SingleCardComponent::class])
-class ThreeCardsActivityModule {
+object ThreeCardsActivityModule {
     @Provides
+    @PerActivity
+    @JvmStatic
     fun provideSubComponentBuilders(threeCardsBuilder: ThreeCardsComponent.Builder, singleCardsBuilder: SingleCardComponent.Builder): SubComponentBuilderMap {
         val subComponentBuilderMap = SubComponentBuilderMap()
         subComponentBuilderMap[ThreeCardsView::class.java] = threeCardsBuilder
@@ -22,20 +27,24 @@ class ThreeCardsActivityModule {
     }
 
     @Provides
-    @ScreenWidthPx
-    fun provideScreenWidth(activity: ThreeCardsActivity): Float {
-        return activity.resources.displayMetrics.widthPixels.toFloat()
-    }
+    @PerActivity
+    @JvmStatic
+    fun provideLifeCycleOwner(activity: ThreeCardsActivity): LifecycleOwner = activity
 
     @Provides
-    fun provideLifeCycleOwner(activity: ThreeCardsActivity): LifecycleOwner = activity
+    @PerActivity
+    @JvmStatic
+    fun provideAnimationCommandRelay(): PublishRelay<SingleCardAnimationCommand> = PublishRelay.create()
 }
 
 @Module
 abstract class CardsActivityBuildersModule {
+    @PerActivity
     @ContributesAndroidInjector(modules = [ThreeCardsActivityModule::class])
     abstract fun bind(): ThreeCardsActivity
 }
 
-@Qualifier
-annotation class ScreenWidthPx
+@Scope
+@Retention(RUNTIME)
+annotation class PerActivity
+

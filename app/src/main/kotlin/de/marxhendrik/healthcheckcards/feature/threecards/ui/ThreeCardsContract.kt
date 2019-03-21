@@ -1,6 +1,5 @@
 package de.marxhendrik.healthcheckcards.feature.threecards.ui
 
-import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardContract
 import io.reactivex.Observable
 
 const val ANIMATION_DELAY_MS = 300L
@@ -11,7 +10,6 @@ interface ThreeCardsContract {
     interface Presenter
 
     interface View {
-        fun getClicks(): Observable<SingleCardContract.View>
-        val cards: Set<SingleCardContract.View>
+        fun getClicks(): Observable<Int>
     }
 }

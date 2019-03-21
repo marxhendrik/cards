@@ -5,7 +5,9 @@ import dagger.Subcomponent
 import de.marxhendrik.healthcheckcards.dagger.SubComponentBuilder
 import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardContract
 import de.marxhendrik.healthcheckcards.feature.singlecard.ui.SingleCardView
+import javax.inject.Scope
 
+@Per1Card
 @Subcomponent(modules = [SingleCardModule::class])
 interface SingleCardComponent {
 
@@ -19,3 +21,7 @@ interface SingleCardComponent {
         fun build(): SingleCardComponent
     }
 }
+
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
+annotation class Per1Card
