@@ -53,6 +53,6 @@ class ThreeCardsView @JvmOverloads constructor(context: Context, attr: Attribute
 
 }
 
-//FIXME Single card animations need to be done here and in presenter, card view should not know other cards, presenter should not know singlecard interface, invent some other
-// excuse for the presenter of singleclard (maybe just set the color?)
-// check layout inflation stuff
+//FIXME
+// long term:
+// * fix animations (cards should go out to the side and not pop in on top of the others
