@@ -27,7 +27,6 @@ class SingleCardView @JvmOverloads constructor(context: Context, private val att
             .view(this)
             .build()
             .inject(this)
-
     }
 
     private fun getCenterTranslation(): Float {
@@ -37,7 +36,6 @@ class SingleCardView @JvmOverloads constructor(context: Context, private val att
     }
 
     private fun getOutRightTranslation() = screenWidth - left
-
 
     override fun animateToOriginalX(delay: Long, func: () -> Unit) =
         this.animateTranslateX(delay = delay, callbackFunc = func)
