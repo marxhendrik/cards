@@ -13,7 +13,7 @@ abstract class LifecycleAwarePresenter : LifecycleAware {
 
     fun Disposable.manage(event: Lifecycle.Event = ON_STOP) {
         when (event) {
-            ON_STOP -> onStopDisposable.add(this)
+            ON_STOP -> addDisposable(this)
             else -> throw NotImplementedError("only ON_STOP is managed")
         }
     }
