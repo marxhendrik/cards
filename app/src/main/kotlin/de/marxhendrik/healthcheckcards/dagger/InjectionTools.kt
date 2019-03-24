@@ -51,17 +51,17 @@ interface InjectingView {
 }
 
 @Suppress("UNCHECKED_CAST")
-fun <Builder : SubComponentBuilder> InjectingView.getComponentBuilder(): Builder {
-    val context = extractHasSubComponentBuilders(getContext())
-    return context.builders[javaClass] as Builder
-}
+fun <Builder : SubComponentBuilder> InjectingView.getComponentBuilder(): Builder =
+    extractHasSubComponentBuilders(getContext()).let {
+        it.builders[javaClass] as Builder
+    }
 
 private fun extractHasSubComponentBuilders(context: Context?): HasSubComponentBuilders {
     return when (context) {
         is HasSubComponentBuilders -> context
         is Activity -> throw IllegalArgumentException("The Activity should implement HasSubComponentBuilders")
         is ContextWrapper -> extractHasSubComponentBuilders(context.baseContext)
-        null -> throw IllegalArgumentException("The content provided to extractHasSubComponentBuilders() is null")
+        null -> throw IllegalArgumentException("The context provided to can't be null")
         else -> {
             throw IllegalArgumentException("The context provided does not implement HasSubComponentBuilders: $context")
         }
