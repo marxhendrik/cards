@@ -25,20 +25,11 @@ class SingleCardPresenter(
     }
 
     private fun animate(index: Int) {
-        if (cardIndex == index) {
-            toggleCentered()
-        } else {
-            unCenter()
-        }
+        if (cardIndex == index) toggleCentered() else unCenter()
     }
 
     private fun toggleCentered() {
-        if (centered) {
-            unCenter()
-        } else {
-            center()
-        }
-
+        if (centered) unCenter() else center()
         centered = !centered
     }
 
