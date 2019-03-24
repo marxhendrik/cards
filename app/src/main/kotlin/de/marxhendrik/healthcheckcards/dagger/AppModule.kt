@@ -11,5 +11,8 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
 annotation class PerApplication
 
 
+/**
+ * Base Module. Add other Application scoped modules into includes parameter, split them by Feature
+ */
 @Module(includes = [AndroidInjectionModule::class, CardsActivityBuildersModule::class])
 class AppModule
