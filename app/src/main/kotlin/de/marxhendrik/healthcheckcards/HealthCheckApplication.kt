@@ -16,9 +16,9 @@ class HealthCheckApplication : Application(), HasActivityInjector {
 
     override fun onCreate() {
         DaggerAppComponent.builder()
-                .app(this)
-                .build()
-                .inject(this)
+            .app(this)
+            .build()
+            .inject(this)
         super.onCreate()
 
         Timber.plant(Timber.DebugTree())

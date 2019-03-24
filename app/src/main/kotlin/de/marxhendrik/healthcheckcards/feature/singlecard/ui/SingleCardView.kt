@@ -7,8 +7,8 @@ import de.marxhendrik.healthcheckcards.R
 import de.marxhendrik.healthcheckcards.dagger.InjectingView
 import de.marxhendrik.healthcheckcards.dagger.getComponentBuilder
 import de.marxhendrik.healthcheckcards.feature.singlecard.dagger.SingleCardComponent
-import de.marxhendrik.healthcheckcards.feature.threecards.extensions.animateTranslateX
-import de.marxhendrik.healthcheckcards.feature.threecards.extensions.animateTranslateZ
+import de.marxhendrik.healthcheckcards.feature.singlecard.extensions.animateTranslateX
+import de.marxhendrik.healthcheckcards.feature.singlecard.extensions.animateTranslateZ
 import de.marxhendrik.healthcheckcards.feature.threecards.ui.ANIMATION_DELAY_MS
 import de.marxhendrik.healthcheckcards.feature.threecards.ui.CENTERED_Z_TRANSLATION
 import javax.inject.Inject
