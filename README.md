@@ -61,6 +61,12 @@ memory. This is a major difference to most architectures where you either have o
 before LifecycleOwner. Now it is really easy to make components Lifecycle-aware and Views work just fine. Fragments or Activities should only be used as "Hosts" for the inner 
 Architecture of the View Layer (until proven otherwise).
 
+
+
+## TODOS for MVP version
+1. Unit Tests for UseCase/Repo/Api
+2. Executor for Usecases to encapsulate RxJava from the Presenter
+
 ## Coming up: Forks to try out different architecture Variants
  * TODO Base Readme here will direct to MVP fork with the content of this Readme
  * TODO Base Readme will explain requirements of the architecture and a quick summary of the forks
