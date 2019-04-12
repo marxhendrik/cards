@@ -58,4 +58,8 @@ class SingleCardView @JvmOverloads constructor(context: Context, private val att
         typedArray.recycle()
         return value
     }
+
+    override fun setBackground(drawable: Int) {
+        setBackgroundResource(drawable)
+    }
 }

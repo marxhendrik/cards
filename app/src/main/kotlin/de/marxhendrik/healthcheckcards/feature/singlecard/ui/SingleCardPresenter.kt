@@ -3,10 +3,12 @@ package de.marxhendrik.healthcheckcards.feature.singlecard.ui
 import com.jakewharton.rxrelay2.Relay
 import de.marxhendrik.healthcheckcards.base.LifecycleAwarePresenter
 import de.marxhendrik.healthcheckcards.base.ViewLifecycle
+import de.marxhendrik.healthcheckcards.feature.singlecard.usecase.AssignColorUseCase
 
 class SingleCardPresenter(
     private val animationCommandRelay: Relay<SingleCardAnimationCommand>,
     private val view: SingleCardContract.View,
+    private val assignColorUseCase: AssignColorUseCase,
     viewLifecycle: ViewLifecycle
 ) : SingleCardContract.Presenter, LifecycleAwarePresenter() {
 
@@ -21,6 +23,11 @@ class SingleCardPresenter(
         animationCommandRelay
             .subscribe {
                 animate(it.index)
+            }.manage()
+
+        assignColorUseCase(cardIndex)
+            .subscribe {
+                view.setBackground(it)
             }.manage()
     }
 

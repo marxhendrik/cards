@@ -1,5 +1,7 @@
 package de.marxhendrik.healthcheckcards.feature.singlecard.ui
 
+import android.support.annotation.DrawableRes
+
 interface SingleCardContract {
     interface Presenter
 
@@ -10,5 +12,6 @@ interface SingleCardContract {
         fun animateToBack()
         fun animateOutRight(delay: Long = 0)
         fun getIndex(): Int
+        fun setBackground(@DrawableRes drawable: Int)
     }
 }

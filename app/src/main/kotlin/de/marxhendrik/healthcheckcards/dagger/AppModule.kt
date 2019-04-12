@@ -10,9 +10,14 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
 @Retention(RUNTIME)
 annotation class PerApplication
 
-
 /**
  * Base Module. Add other Application scoped modules into includes parameter, split them by Feature
  */
-@Module(includes = [AndroidInjectionModule::class, CardsActivityBuildersModule::class])
-class AppModule
+@Module(includes = [AndroidInjectionModule::class, ActivityBuilderModules::class])
+object AppModule
+
+
+@Module(includes = [CardsActivityBuildersModule::class])
+object ActivityBuilderModules
+
+
