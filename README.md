@@ -36,8 +36,8 @@ This code shows some architectural examples and experiments that are not necessa
 abstract Module class to use abstract *@Binds* methods in. It just seems less natural and more complicated to do for this usecase
 
 
-## Coming up: Forks
- * TODO Base Readme here will direct to MVP fork with the content of this Readme
- * TODO Base Readme will explain requirements of the architecture and a quick summary of the forks
- * TODO MVVM-classic fork
- * TODO MVVM without fragments fork (???)
+## Coming up: branches with different architectures
+ * TODO Base Readme here will direct to MVP branch with the content of this Readme
+ * TODO Base Readme will explain requirements of the architecture and a quick summary of the branches 
+ * TODO Google MVVM-classic branch 
+ * TODO MVVM without fragments branch (???)
