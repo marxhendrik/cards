@@ -1,8 +1,9 @@
 # HealthCheck app
 
-A simple (?) app that shows three cards in traffic light colors and highlights a card when clicked upon.
+A simple (?) app that shows three cards in different colors and highlights a card when clicked upon.
  
-This code showcases some architectural examples and experiments that are not necessarily recommended approaches.
+## This is a playground not a showcase 
+This code shows some architectural examples and experiments that are not necessarily recommended approaches.
 
 ## Requirements
 1. TODO: formulate the requirements of the app regardless of architecture
