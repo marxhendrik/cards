@@ -1,8 +1,9 @@
 # HealthCheck app
 
-A simple (?) app that shows three cards in traffic light colors and highlights a card when clicked upon.
+A simple (?) app that shows three cards in different colors and highlights a card when clicked upon.
  
-This code showcases some architectural examples and experiments that are not necessarily recommended approaches.
+## This is a playground not a showcase 
+This code shows some architectural examples and experiments that are not necessarily recommended approaches.
 
 ## Requirements
 1. TODO: formulate the requirements of the architecture regardless of which Architectural Template is used (MVP, MVVM...)
@@ -67,10 +68,11 @@ Architecture of the View Layer (until proven otherwise).
 1. Unit Tests for UseCase/Repo/Api
 2. Executor for Usecases to encapsulate RxJava from the Presenter
 
-## Coming up: Forks to try out different architecture Variants
- * TODO Base Readme here will direct to MVP fork with the content of this Readme
- * TODO Base Readme will explain requirements of the architecture and a quick summary of the forks
- * TODO MVVM-classic fork
- * TODO custom MVVM fork with the following adaptions to the google example version: No Fragments, View-Based Scope, AAC-ViewModel is not called ViewModel and does not contain 
+## Coming up: Branches to try out different architecture Variants
+ * TODO Base Readme here will direct to MVP branch with the content of this Readme
+ * TODO Base Readme will explain requirements of the architecture and a quick summary of the branch
+ * TODO Google MVVM-classic branch
+ * TODO custom MVVM branch with the following adaptions to the google example version: No Fragments, View-Based Scope, AAC-ViewModel is not called ViewModel and does not contain 
  logic but is only used for retaining state during configuration changes, Maybe live-data, maybe Rx, Maybe ViewBinding....
- * In either MVP or MVVM fork: Executor for Usecases that encapsulates Rx, so that later Co-Routines can replace Rx without touching the Presenters
+ * In either MVP or MVVM branch: Executor for Usecases that encapsulates Rx, so that later Co-Routines can replace Rx without touching the Presenters
+
